@@ -1,0 +1,39 @@
+#caption {
+  font-size: 40;
+  font-family: Seville-Bold;
+  fill: #000000;
+  text-anchor: middle;
+  text-length: 40;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+#intro {
+  font-size: 30;
+  font-family: Seville-Regular;
+  fill: #000000;
+  display-align: before;
+  text-anchor: middle;
+  text-length: 40;
+  display: none;
+}
+
+#frgd {
+  fill: green;
+}
+
+.bar {
+  fill: #000000;
+  y: 0;
+  width: 2;
+  height: 100%;
+}
+
+#bartext {
+  font-size: 32;
+  font-family: Seville-Condensed;
+  letter-spacing: 2;
+  fill: #000000;
+  text-anchor: middle;
+  text-length: 40;
+}
