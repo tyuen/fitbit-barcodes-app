@@ -12,17 +12,15 @@ var frgd = document.getElementById("frgd");
 var barname = document.getElementById("caption");
 var barcode = document.getElementById("barcode");
 var bartext = document.getElementById("bartext");
-var cNodes = new Array(15);
+var cNodes = new Array(15*11);
 const WIDTH = document.getElementById("main").width;
 
 function init() {
   for(let i = 0; i < 15; i++) {
-    cNodes[i] = new Array(12);
     let n = document.getElementById(`n${i}`);
     for(let j = 0; j < 11; j++) {
-      cNodes[i][j] = n.getElementById(`b${j}`);
+      cNodes[i*11 + j] = n.getElementById(`b${j}`);
     }
-    cNodes[i][11] = n;
   }
 
   try {
@@ -48,8 +46,7 @@ function settingsChanged() {
     let item = settings.cards[0];
     barname.text = item.name || "";
     frgd.style.fill = item.color || "#12D612";
-    bartext.text = item.code;
-    setBarcode(item.code);
+    bartext.text = setBarcode(item.code);
     display.autoOff = false;
     setTimeout(() => {display.autoOff = true}, 180000);
   }
@@ -80,8 +77,7 @@ function onKeyPress(e) {
 
     clickTimer = setTimeout(() => {
       clickTimer = null;
-      bartext.text = item.code;
-      setBarcode(item.code);
+      bartext.text = setBarcode(item.code);
     }, 350);
   }
 }
@@ -91,7 +87,7 @@ function pendingFiles() {
   while(temp = inbox.nextFile()) {
     vibration.start("nudge");
     display.poke();
-    console.log("settings recvd");
+    console.log("rcvd");
     settings = fs.readFileSync(temp, "json");
     fs.unlinkSync(temp);
     if(settings.cards) {
@@ -106,53 +102,56 @@ function pendingFiles() {
 }
 
 function setBarcode(str) {
+  let data;
   try {
-    let arr = toCode128(str);
+    if(isUPCA(str)) {
+      data = toUPCA(str);
+    } else {
+      data = toCode128(str);
+    }
   } catch(e) {
-    for(let i = 0; i < 15; i++) {
-      let node = cNodes[i][11].style.display = "none";
-    }
-    bartext.text = e;
-    return;
+    barcode.style.display = "none";
+    throw e;
+    return e;
   }
-  if(arr.length > 15) {
-    for(let i = 0; i < 15; i++) {
-      let node = cNodes[i][11].style.display = "none";
-    }
-    bartext.text = "Code too long!";
-    return;
+  
+  let arr = data.arr;
+  let sizes = data.sizes;
+  let length = data.length;
+
+  if(length > cNodes.length) {
+    barcode.style.display = "none";
+    return "Code too long!";
   }
-  let w = Math.max(2, Math.floor(WIDTH/((arr.length - 1)*11 + 22)));
-  let i = 0;
-  for(; i < arr.length && i < 15; i++) {
-    let val = arr[i].toString(2);
-    let node = cNodes[i][11];
-    node.style.display = "inline";
-    node.width = w*11;
-    node.x = w*11*i;
-    let j = 0;
-    for(; j < val.length; j++) {
-      let b = cNodes[i][j];
-      if(val.charCodeAt(j) === 49) {
-        b.style.display = "inline";
-        b.width = w;
-        b.x = w*j;
+
+  barcode.style.display = "inline";
+
+  let w = Math.max(2, Math.floor(WIDTH/(length + 20)));
+
+  for(let i = cNodes.length - 1; i > length; i--) {
+    cNodes[i].style.display = "none";
+  }
+  
+  let index = length - 1;
+
+  for(let i = arr.length - 1; i >= 0; i--) {
+    let block = arr[i];
+    for(let j = sizes[i] - 1; j >= 0; j--) {
+      let node = cNodes[index];
+      if(block & 1 === 1) {
+        node.style.display = "inline";
+        node.width = w;
+        node.x = index*w;
       } else {
-        b.style.display = "none";
+        node.style.display = "none";
       }
-    }
-    if(j < 11) {
-      for(; j < 11; j++) {
-        cNodes[i][j].style.display = "none";
-      }
+      block >>= 1;
+      index--;
     }
   }
-  if(i < 15) {
-    for(; i < 15; i++) {
-      cNodes[i][11].style.display = "none";
-    }
-  }
-  barcode.x = Math.floor((WIDTH - w*((arr.length - 1)*11 + 2))/2);
+
+  barcode.x = Math.floor((WIDTH - w*length)/2);
+  return str;
 }
 
 function toCode128(str) {
@@ -193,5 +192,37 @@ function toCode128(str) {
   arr.push(parseInt(codes.substr((chk % 103)*3, 3), 16));
   arr.push(1594);  //Stop
   arr.push(3);
-  return arr;
+  let sizes = new Array(arr.length - 1);
+  for(let i = sizes.length - 1; i >= 0; i--) sizes[i] = 11;
+  sizes.push(2);
+  return {arr, sizes, length: (arr.length - 1)*11 + 2};
+}
+
+function isUPCA(str) {
+  if(str.length !== 12) return false;
+  let chk = 0;
+  for(let i = 0; i < 12; i += 2) {
+    chk += str.charAt(i)*3 + str.charAt(i + 1)*1;
+    if(isNaN(chk)) return false;
+  }
+  return (chk % 10) === 0;
+}
+
+function toUPCA(str) {
+  const codes = "0d19133d23312f3b370b"+"72666c425c4e50444874";
+  let arr = [5];  //Start
+  for(let i = 0; i < 6; i++) {
+    arr.push(parseInt(codes.substr(str.charAt(i)*2, 2), 16));
+  }
+  arr.push(10);  //Middle
+  for(let i = 6; i < 12; i++) {
+    arr.push(parseInt(codes.substr(str.charAt(i)*2 + 20, 2), 16));
+  }
+  arr.push(5);  //End
+  let sizes = new Array(14);
+  sizes[0] = 3;
+  for(let i = sizes.length - 1; i > 0; i--) sizes[i] = 7;
+  sizes[7] = 5;
+  sizes.push(3);
+  return {arr, sizes, length: 95};
 }
