@@ -1,28 +1,24 @@
 <svg id="main" viewport-fill="#000000">
   <defs>
     <symbol id="ltr">
-      <section width="22" height="100%">
-        <rect class="bar" id="b0" x="0" />
-        <rect class="bar" id="b1" x="2" />
-        <rect class="bar" id="b2" x="4" />
-        <rect class="bar" id="b3" x="6" />
-        <rect class="bar" id="b4" x="8" />
-        <rect class="bar" id="b5" x="10" />
-        <rect class="bar" id="b6" x="12" />
-        <rect class="bar" id="b7" x="14" />
-        <rect class="bar" id="b8" x="16" />
-        <rect class="bar" id="b9" x="18" />
-        <rect class="bar" id="b10" x="20" />
-      </section>
+      <rect class="bar" id="b0" />
+      <rect class="bar" id="b1" />
+      <rect class="bar" id="b2" />
+      <rect class="bar" id="b3" />
+      <rect class="bar" id="b4" />
+      <rect class="bar" id="b5" />
+      <rect class="bar" id="b6" />
+      <rect class="bar" id="b7" />
+      <rect class="bar" id="b8" />
+      <rect class="bar" id="b9" />
+      <rect class="bar" id="b10" />
     </symbol>
   </defs>
 
-  <g>
-    <rect x="20" y="70" width="100%-40" height="100%-70" fill="#ffffff" />
-    <rect x="0" y="70" width="100%" height="100%-90" fill="#ffffff" />
-    <circle cx="100%-20" cy="100%-20" r="20" fill="#ffffff" />
-    <circle cx="20" cy="100%-20" r="20" fill="#ffffff" />
-  </g>
+  <rect x="20" y="70" width="100%-40" height="100%-70" fill="#ffffff" />
+  <rect x="0" y="70" width="100%" height="100%-90" fill="#ffffff" />
+  <circle cx="100%-20" cy="100%-20" r="20" fill="#ffffff" />
+  <circle cx="20" cy="100%-20" r="20" fill="#ffffff" />
   
   <g id="frgd">
     <rect x="20" y="0" width="100%-40" height="70" fill="inherit" />
@@ -36,21 +32,21 @@
   <textarea id="intro" x="8%" width="84%" y="100">Go into app settings on your phone to add barcodes.</textarea>
   
   <svg id="barcode" x="0" y="100%-150" width="330" height="100">
-    <use href="#ltr" id="n0" x="0" />
-    <use href="#ltr" id="n1" x="22" />
-    <use href="#ltr" id="n2" x="44" />
-    <use href="#ltr" id="n3" x="66" />
-    <use href="#ltr" id="n4" x="88" />
-    <use href="#ltr" id="n5" x="110" />
-    <use href="#ltr" id="n6" x="132" />
-    <use href="#ltr" id="n7" x="154" />
-    <use href="#ltr" id="n8" x="176" />
-    <use href="#ltr" id="n9" x="198" />
-    <use href="#ltr" id="n10" x="220" />
-    <use href="#ltr" id="n11" x="242" />
-    <use href="#ltr" id="n12" x="264" />
-    <use href="#ltr" id="n13" x="286" />
-    <use href="#ltr" id="n14" x="308" />
+    <use href="#ltr" id="n0" />
+    <use href="#ltr" id="n1" />
+    <use href="#ltr" id="n2" />
+    <use href="#ltr" id="n3" />
+    <use href="#ltr" id="n4" />
+    <use href="#ltr" id="n5" />
+    <use href="#ltr" id="n6" />
+    <use href="#ltr" id="n7" />
+    <use href="#ltr" id="n8" />
+    <use href="#ltr" id="n9" />
+    <use href="#ltr" id="n10" />
+    <use href="#ltr" id="n11" />
+    <use href="#ltr" id="n12" />
+    <use href="#ltr" id="n13" />
+    <use href="#ltr" id="n14" />
   </svg>
 
   <text id="bartext" x="50%" y="100%-15" />
