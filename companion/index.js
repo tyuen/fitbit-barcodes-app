@@ -22,6 +22,8 @@ function setCard(name, value) {
     value = JSON.parse(value).name;
   } else if(name === "color") {
     value = trim(value);
+  } else if(name === "type") {
+    value = JSON.parse(value).selected[0];
   }
   cards[i][name] = value;
 }
@@ -44,6 +46,7 @@ function sendAll() {
       let o = {code: cards[i].code};
       if(cards[i].name) o.name = encodeURIComponent(cards[i].name);
       if(cards[i].color) o.color = cards[i].color;
+      if(cards[i].type) o.type = cards[i].type;
       tmp.push(o);
     }
   }
@@ -52,6 +55,6 @@ function sendAll() {
   for (let i = 0; i < data.length; i++) {
     data[i] = tmp.charCodeAt(i);
   }
-  console.log("sending data");
+  console.log("sent");
   outbox.enqueue("settings.txt", data);
 }
