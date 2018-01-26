@@ -46,7 +46,7 @@ function settingsChanged() {
     let item = settings.cards[0];
     barname.text = item.name || "";
     frgd.style.fill = item.color || "#12D612";
-    bartext.text = setBarcode(item.code);
+    bartext.text = setBarcode(item.code, item.type);
     display.autoOff = false;
     setTimeout(() => {display.autoOff = true}, 180000);
   }
@@ -77,7 +77,7 @@ function onKeyPress(e) {
 
     clickTimer = setTimeout(() => {
       clickTimer = null;
-      bartext.text = setBarcode(item.code);
+      bartext.text = setBarcode(item.code, item.type);
     }, 350);
   }
 }
@@ -101,17 +101,22 @@ function pendingFiles() {
   }
 }
 
-function setBarcode(str) {
+function setBarcode(str, type) {
   let data;
   try {
-    if(isUPCA(str)) {
-      data = toUPCA(str);
+    if(type === 1) {
+      data = toCode128(str);      
+    } else if(isEAN13(str)) {
+      switch(str.length) {
+        case 11: data = toEAN13("0" + str + getCheckDigit(str)); break;
+        case 12: data = toEAN13("0" + str); break;
+        default: data = toEAN13(str);
+      }
     } else {
       data = toCode128(str);
     }
   } catch(e) {
     barcode.style.display = "none";
-    throw e;
     return e;
   }
   
@@ -138,7 +143,7 @@ function setBarcode(str) {
     let block = arr[i];
     for(let j = sizes[i] - 1; j >= 0; j--) {
       let node = cNodes[index];
-      if(block & 1 === 1) {
+      if((block & 1) === 1) {
         node.style.display = "inline";
         node.width = w;
         node.x = index*w;
@@ -198,25 +203,42 @@ function toCode128(str) {
   return {arr, sizes, length: (arr.length - 1)*11 + 2};
 }
 
-function isUPCA(str) {
-  if(str.length !== 12) return false;
-  let chk = 0;
-  for(let i = 0; i < 12; i += 2) {
-    chk += str.charAt(i)*3 + str.charAt(i + 1)*1;
-    if(isNaN(chk)) return false;
+function isEAN13(str) {
+  let len = str.length;
+  if(/^[0-9]+$/.test(str)) {
+    if(len === 11) return true;
+    if(len === 12 && getCheckDigit(str.substr(0, 11)) === str.charAt(11)*1) return true;
+    if(len === 13 && getCheckDigit(str.substr(0, 12)) === str.charAt(12)*1) return true;
   }
-  return (chk % 10) === 0;
+  return false;
 }
 
-function toUPCA(str) {
-  const codes = "0d19133d23312f3b370b"+"72666c425c4e50444874";
+function getCheckDigit(str) {
+  let chk = 0;
+  let len = str.length;
+  let odd = (len % 2 === 1);
+  for(let i = 0; i < len; i++) {
+    chk += str.charAt(i)*(odd ? 3 : 1);
+    odd = !odd;
+  }
+  return 10 - (chk % 10);
+}
+
+function toEAN13(str) {
+  const L = "0d19133d23312f3b370b";
+  const R = "72666c425c4e50444874";
+  const G = "27331b211d3905110917";
+  const PAT = "00342c1c32260e2a1a16";
+  let ptn = parseInt(PAT.substr(str.charAt(0)*2, 2), 16);
+  
   let arr = [5];  //Start
-  for(let i = 0; i < 6; i++) {
-    arr.push(parseInt(codes.substr(str.charAt(i)*2, 2), 16));
+  for(let i = 1; i < 7; i++) {
+    arr.push(parseInt(((ptn & 1) === 1 ? G : L).substr(str.charAt(i)*2, 2), 16));
+    ptn >>= 1;
   }
   arr.push(10);  //Middle
-  for(let i = 6; i < 12; i++) {
-    arr.push(parseInt(codes.substr(str.charAt(i)*2 + 20, 2), 16));
+  for(let i = 7; i < 13; i++) {
+    arr.push(parseInt(R.substr(str.charAt(i)*2, 2), 16));
   }
   arr.push(5);  //End
   let sizes = new Array(14);
