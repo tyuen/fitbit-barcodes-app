@@ -48,6 +48,7 @@ function settingsChanged() {
     frgd.style.fill = item.color || "#12D612";
     bartext.text = setBarcode(item.code, item.type);
     display.autoOff = false;
+    //display.brightnessOverride = 1;
     setTimeout(() => {display.autoOff = true}, 180000);
   }
   barcode.style.display = empty ? "none" : "inline";
@@ -104,7 +105,9 @@ function pendingFiles() {
 function setBarcode(str, type) {
   let data;
   try {
-    if(type === 1) {
+    if(type === 2) {
+      data = toCode39(str);
+    } else if(type === 1) {
       data = toCode128(str);      
     } else if(isEAN13(str)) {
       switch(str.length) {
@@ -133,7 +136,7 @@ function setBarcode(str, type) {
 
   let w = Math.max(2, Math.floor(WIDTH/(length + 20)));
 
-  for(let i = cNodes.length - 1; i > length; i--) {
+  for(let i = cNodes.length - 1; i >= length; i--) {
     cNodes[i].style.display = "none";
   }
   
@@ -157,6 +160,36 @@ function setBarcode(str, type) {
 
   barcode.x = Math.floor((WIDTH - w*length)/2);
   return str;
+}
+
+function toCode39(str) {
+  const codes = "a6dd2bb2bd95a6b" + //0~4
+    "d35b35a5bd2db2d" +  //6~9
+    "d4bb4bda5acbd65b65a9b" +  //abcdefg
+    "d4db4dacdd53b53da9ad3" +  //hijklmn
+    "d69b69ab3d59b59ad9cab" +  //opqrstu
+    "9abcd596bcb59b5" + //vwxyz
+    "96d9ad95b925a49cad929949";  //* -$%./+
+  let arr = [2413];
+  for(let i = 0; i < str.length; i++) {
+    let c = str.charCodeAt(i);
+    if(c >= 48 && c <= 57) {  //0~9
+      c -= 48;
+    } else if(c >= 65 && c <= 90) {  //A~Z
+      c -= 55;
+    } else {
+      c = "* -$%./+".indexOf(str.charAt(i));
+      if(c >= 0) {
+        c = c + 36;
+      } else throw "OOB";
+    }
+    arr.push(parseInt(codes.substr(c*3, 3), 16));
+  }
+  arr.push(arr[0]);
+  
+  let sizes = [];
+  for(let i = arr.length - 1; i >= 0; i--) sizes[i] = 13;
+  return {arr, sizes, length: arr.length*13};
 }
 
 function toCode128(str) {
