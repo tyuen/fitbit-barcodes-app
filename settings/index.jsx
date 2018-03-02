@@ -13,7 +13,8 @@ var allColors = [
 
 var allTypes = [
   {name: "Auto-Detect", value: "0"},
-  {name: "Code-128", value: "1"}
+  {name: "Code-128", value: "1"},
+  {name: "Code-39", value: "2"}
 ];
 
 function getLen(str) {
