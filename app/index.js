@@ -270,7 +270,7 @@ function getCheckDigit(str) {
     chk += str.charAt(i)*(odd ? 3 : 1);
     odd = !odd;
   }
-  return 10 - (chk % 10);
+  return (10 - (chk % 10)) % 10;
 }
 
 function toEAN13(str) {
