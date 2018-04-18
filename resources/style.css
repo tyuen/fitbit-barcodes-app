@@ -19,7 +19,7 @@
 }
 
 #frgd {
-  fill: green;
+  fill: #12D612;
 }
 
 .bar {
@@ -27,6 +27,7 @@
   y: 0;
   width: 2;
   height: 100%;
+  display: none;
 }
 
 #bartext {
