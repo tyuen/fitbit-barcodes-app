@@ -15,39 +15,41 @@
     </symbol>
   </defs>
 
-  <rect x="20" y="70" width="100%-40" height="100%-70" fill="#ffffff" />
-  <rect x="0" y="70" width="100%" height="100%-90" fill="#ffffff" />
-  <circle cx="100%-20" cy="100%-20" r="20" fill="#ffffff" />
-  <circle cx="20" cy="100%-20" r="20" fill="#ffffff" />
-  
-  <g id="frgd">
-    <rect x="20" y="0" width="100%-40" height="70" fill="inherit" />
-    <rect x="0" y="20" width="100%" height="50" fill="inherit" />
-    <circle cx="20" cy="20" r="20" fill="inherit" />
-    <circle cx="100%-20" cy="20" r="20" fill="inherit" />
-  </g>
-  
-  <text id="caption" x="50%" y="48">...</text>
+  <svg id="cntr">
+    <rect x="20" y="70" width="100%-40" height="100%-70" fill="#ffffff" />
+    <rect x="0" y="70" width="100%" height="100%-90" fill="#ffffff" />
+    <circle cx="100%-20" cy="100%-20" r="20" fill="#ffffff" />
+    <circle cx="20" cy="100%-20" r="20" fill="#ffffff" />
 
-  <textarea id="intro" x="8%" width="84%" y="100">Go into app settings on your phone to add barcodes.</textarea>
-  
-  <svg id="barcode" x="0" y="100%-150" width="330" height="100">
-    <use href="#ltr" id="n0" />
-    <use href="#ltr" id="n1" />
-    <use href="#ltr" id="n2" />
-    <use href="#ltr" id="n3" />
-    <use href="#ltr" id="n4" />
-    <use href="#ltr" id="n5" />
-    <use href="#ltr" id="n6" />
-    <use href="#ltr" id="n7" />
-    <use href="#ltr" id="n8" />
-    <use href="#ltr" id="n9" />
-    <use href="#ltr" id="n10" />
-    <use href="#ltr" id="n11" />
-    <use href="#ltr" id="n12" />
-    <use href="#ltr" id="n13" />
-    <use href="#ltr" id="n14" />
+    <g id="frgd">
+      <rect x="20" y="0" width="100%-40" height="70" fill="inherit" />
+      <rect x="0" y="20" width="100%" height="50" fill="inherit" />
+      <circle cx="20" cy="20" r="20" fill="inherit" />
+      <circle cx="100%-20" cy="20" r="20" fill="inherit" />
+    </g>
+
+    <text id="caption" x="50%" y="48">...</text>
+
+    <textarea id="intro" x="8%" width="84%" y="100">Go into app settings on your phone to add barcodes.</textarea>
+
+    <svg id="barcode" x="0" y="100%-150" width="330" height="100">
+      <use href="#ltr" id="n0" />
+      <use href="#ltr" id="n1" />
+      <use href="#ltr" id="n2" />
+      <use href="#ltr" id="n3" />
+      <use href="#ltr" id="n4" />
+      <use href="#ltr" id="n5" />
+      <use href="#ltr" id="n6" />
+      <use href="#ltr" id="n7" />
+      <use href="#ltr" id="n8" />
+      <use href="#ltr" id="n9" />
+      <use href="#ltr" id="n10" />
+      <use href="#ltr" id="n11" />
+      <use href="#ltr" id="n12" />
+      <use href="#ltr" id="n13" />
+      <use href="#ltr" id="n14" />
+    </svg>
+
+    <text id="bartext" x="50%" y="100%-15" />
   </svg>
-
-  <text id="bartext" x="50%" y="100%-15" />
 </svg>
