@@ -36,12 +36,28 @@ function getLen(str) {
     for(let i = 0; i < len; i += 2) n++;
     if(len < str.length) n += 2;
   }
-  return n > 15 ? "Warning: Barcode is "+n+" units, which exceeds 15 units." : null;
+  return n > 15 ? "Warning: Barcode is "+n+" tuples, which exceeds 15 tuples." : null;
+}
+
+function prettyAgo(t) {
+  if(t) {
+    t = Date.now()/1000 - t;
+    if(t < 60) {
+      return "Saved now!"
+    } else if(t < 60*60) {
+      return "Saved " + Math.floor(t/60) + " minute(s) ago";
+    } else if(t < 24*60*60) {
+      return "Saved " + Math.floor(t/(60*60)) + "hour(s) ago";
+    }
+  }
+  return "";
 }
 
 registerSettingsPage(props => {
   return (
     <Page>
+      <Toggle settingsKey="bright" label="Increase screen brightness" />
+
       <Section title="Barcode 1" description={getLen(props.settings.code1)}>
         <TextInput settingsKey="name1" title="Name" placeholder="e.g., 7-Eleven" />
         <TextInput settingsKey="code1" label="Barcode" placeholder="e.g., 12345678" />
@@ -75,6 +91,10 @@ registerSettingsPage(props => {
         <TextInput settingsKey="code5" title="Barcode" placeholder="e.g., 12345678" />
         <ColorSelect settingsKey="color5" colors={allColors} />
         <Select settingsKey="type5" label="Encoding" options={allTypes} />
+      </Section>
+
+      <Section description={prettyAgo(props.settings.clickButton)}>
+        <Button label="Save" onClick={() => props.settingsStorage.setItem("clickButton", ""+Math.floor(Date.now()/1000)) } />
       </Section>
     </Page>
   );
