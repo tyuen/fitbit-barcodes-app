@@ -1,4 +1,4 @@
-# Barcodes app for Fitbit Ionic
+# Barcodes app for Fitbit Ionic/Versa
 
 ![screenshot](Barcode-screenshot.png)
 
