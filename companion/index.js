@@ -1,12 +1,18 @@
 import {outbox} from "file-transfer";
 import {settingsStorage as store} from "settings";
+import {peerSocket} from "messaging";
 import {me} from "companion";
 
 var cards = [];
+var bright = false;
 
 function trim(s) {
   return (s.charAt && s.charAt(0) === '"') ? s.substr(1, s.length - 2) : s;
 }
+
+peerSocket.onmessage = e => {
+  if(e.data && e.data.getAll) sendAll();
+};
 
 store.onchange = e => {
   setCard(e.key, e.newValue);
@@ -14,18 +20,24 @@ store.onchange = e => {
 };
 
 function setCard(name, value) {
-  let i = name.substr(-1)*1 - 1;  //e.g., code1,color1
-  if(!cards[i]) cards[i] = {};
-  name = name.substr(0, name.length - 1);
+  let i = name.substr(-1);  //e.g., code1,color1
+  if(/^\d+$/.test(i)) {
+    i = i*1 - 1;
+    if(!cards[i]) cards[i] = {};
+    name = name.substr(0, name.length - 1);
 
-  if(name === "name" || name === "code") {
-    value = JSON.parse(value).name;
-  } else if(name === "color") {
-    value = trim(value);
-  } else if(name === "type") {
-    value = JSON.parse(value).selected[0];
+    if(name === "name" || name === "code") {
+      value = JSON.parse(value).name;
+    } else if(name === "color") {
+      value = trim(value);
+    } else if(name === "type") {
+      value = JSON.parse(value).selected[0];
+    }
+    cards[i][name] = value;
+
+  } else if(name === "bright") {
+    bright = (value === "true");
   }
-  cards[i][name] = value;
 }
 
 function init() {
@@ -50,7 +62,7 @@ function sendAll() {
       tmp.push(o);
     }
   }
-  tmp = JSON.stringify({cards: tmp});
+  tmp = JSON.stringify({cards: tmp, bright: bright});
   let data = new Uint8Array(tmp.length);
   for (let i = 0; i < data.length; i++) {
     data[i] = tmp.charCodeAt(i);
