@@ -18,10 +18,11 @@ import document from "document";
 import {inbox} from "file-transfer";
 import {display} from "display";
 import {vibration} from "haptics";
+import {peerSocket} from "messaging";
 import fs from "fs";
 
 var settings = {};
-
+var lastClearedBars = 0;
 var selected = 0;
 
 var frgd = document.getElementById("frgd");
@@ -41,7 +42,12 @@ function init() {
 
   try {
     settings = fs.readFileSync("settings.txt", "json");
-  } catch(e) {}
+  } catch(e) {
+    peerSocket.onopen = () => {
+      for(let o in settings) return;
+      peerSocket.send({getAll: true});
+    };    
+  }
 
   pendingFiles();
   inbox.onnewfile = pendingFiles;
@@ -64,7 +70,7 @@ function settingsChanged() {
     frgd.style.fill = item.color || "#12D612";
     bartext.text = setBarcode(item.code, item.type);
     display.autoOff = false;
-    //display.brightnessOverride = 1;
+    display.brightnessOverride = settings.bright ? 1 : undefined;
     setTimeout(() => {display.autoOff = true}, 180000);
   }
   barcode.style.display = empty ? "none" : "inline";
@@ -143,7 +149,7 @@ function setBarcode(str, type) {
   let sizes = data.sizes;
   let length = data.length;
 
-  if(length > cNodes.length) {
+  if(length > cNodes.length || length*2 > WIDTH - 20) {
     barcode.style.display = "none";
     return "Code too long!";
   }
@@ -152,9 +158,12 @@ function setBarcode(str, type) {
 
   let w = Math.max(2, Math.floor(WIDTH/(length + 20)));
 
-  for(let i = cNodes.length - 1; i >= length; i--) {
-    cNodes[i].style.display = "none";
+  if(length < lastClearedBars) {
+    for(let i = lastClearedBars - 1; i >= length; i--) {
+      cNodes[i].style.display = "none";
+    }
   }
+  lastClearedBars = length;
   
   let index = length - 1;
 
