@@ -30,7 +30,7 @@
 
     <text id="caption" x="50%" y="48">...</text>
 
-    <textarea id="intro" x="8%" width="84%" y="100">Go into app settings on your phone to add barcodes.</textarea>
+    <textarea id="intro" x="8%" width="84%">Go into app settings on your phone to add barcodes.</textarea>
 
     <svg id="barcode" x="0" y="100%-150" width="330" height="100">
       <use href="#ltr" id="n0" />
