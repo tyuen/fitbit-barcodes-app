@@ -46,7 +46,7 @@ function init() {
     setCard(k, store.getItem(k));
   }
 
-  if(me.launchReasons.settingChanged) sendAll();
+  if(me.launchReasons.settingsChanged) sendAll();
 }
 
 init();
