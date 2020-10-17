@@ -1,0 +1,73 @@
+<svg id="main" viewport-fill="#000000">
+  <defs>
+    <symbol id="ltr">
+      <rect class="bar" id="b0" />
+      <rect class="bar" id="b1" />
+      <rect class="bar" id="b2" />
+      <rect class="bar" id="b3" />
+      <rect class="bar" id="b4" />
+      <rect class="bar" id="b5" />
+      <rect class="bar" id="b6" />
+      <rect class="bar" id="b7" />
+      <rect class="bar" id="b8" />
+      <rect class="bar" id="b9" />
+      <rect class="bar" id="b10" />
+    </symbol>
+  </defs>
+
+  <svg id="cntr" pointer-events="none">
+    <rect x="0" y="0" width="100%" height="100%" fill="#ffffff" />
+    <!--rect x="34" y="70" width="100%-68" height="100%-70" fill="#ffffff" />
+    <rect x="0" y="70" width="100%" height="100%-104" fill="#ffffff" />
+    <circle cx="100%-35" cy="100%-35" r="34" fill="#ffffff" />
+    <circle cx="34" cy="100%-35" r="34" fill="#ffffff" /-->
+
+    <line x1="100%-46" y1="100%-38" x2="100%-40" y2="100%-32" fill="#cccccc" stroke-width="2" stroke-linecap="butt" />
+    <line x1="100%-34" y1="100%-38" x2="100%-40" y2="100%-32" fill="#cccccc" stroke-width="2" stroke-linecap="butt" />
+
+    <g id="frgd">
+      <rect x="0" y="0" width="100%" height="80" fill="inherit" />
+      <!--rect x="34" y="0" width="100%-70" height="70" fill="inherit" />
+      <rect x="0" y="34" width="100%" height="36" fill="inherit" />
+      <circle cx="34" cy="34" r="34" fill="inherit" />
+      <circle cx="100%-35" cy="34" r="34" fill="inherit" /-->
+
+      <line x1="100%-46" y1="38" x2="100%-40" y2="32" fill="#ffffff" stroke-width="2" stroke-linecap="butt" />
+      <line x1="100%-34" y1="38" x2="100%-40" y2="32" fill="#ffffff" stroke-width="2" stroke-linecap="butt" />
+    </g>
+
+    <text id="caption" x="50%" y="56">...</text>
+
+    <textarea id="intro" x="8%" width="84%">Go into app settings on your phone to add barcodes.</textarea>
+
+    <svg id="barcode" x="0" y="100%-220" width="330" height="130">
+      <use href="#ltr" id="n0" />
+      <use href="#ltr" id="n1" />
+      <use href="#ltr" id="n2" />
+      <use href="#ltr" id="n3" />
+      <use href="#ltr" id="n4" />
+      <use href="#ltr" id="n5" />
+      <use href="#ltr" id="n6" />
+      <use href="#ltr" id="n7" />
+      <use href="#ltr" id="n8" />
+      <use href="#ltr" id="n9" />
+      <use href="#ltr" id="n10" />
+      <use href="#ltr" id="n11" />
+      <use href="#ltr" id="n12" />
+      <use href="#ltr" id="n13" />
+      <use href="#ltr" id="n14" />
+    </svg>
+
+    <text id="bartext" x="50%" y="100%-40" />
+  </svg>
+
+  <circle id="up-btn" cx="100%-25" cy="25" r="60" fill="#ffffff" opacity="0" pointer-events="visible">
+    <animate attributeName="opacity" begin="mousedown" from="0" to="0.5" dur="0" />
+    <animate attributeName="opacity" begin="mouseup+0.1" from="0.5" to="0" dur="0" />
+  </circle>
+  
+  <circle id="down-btn" cx="100%-25" cy="100%-25" r="60" fill="#888888" opacity="0" pointer-events="visible">
+    <animate attributeName="opacity" begin="mousedown" from="0" to="0.5" dur="0" />
+    <animate attributeName="opacity" begin="mouseup+0.1" from="0.5" to="0" dur="0" />
+  </circle>
+</svg>
