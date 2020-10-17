@@ -1,6 +1,6 @@
 #caption {
   font-size: 40;
-  font-family: Seville-Bold;
+  font-family: System-Bold;
   fill: #000000;
   text-anchor: middle;
   text-length: 40;
@@ -10,7 +10,7 @@
 
 #intro {
   font-size: 30;
-  font-family: Seville-Regular;
+  font-family: System-Regular;
   fill: #000000;
   display-align: before;
   text-anchor: middle;
@@ -32,7 +32,7 @@
 
 #bartext {
   font-size: 32;
-  font-family: Seville-Condensed;
+  font-family: System-Light;
   letter-spacing: 2;
   fill: #000000;
   text-anchor: middle;
