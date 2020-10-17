@@ -19,6 +19,7 @@ import {inbox} from "file-transfer";
 import {display} from "display";
 import {vibration} from "haptics";
 import {peerSocket} from "messaging";
+import {me} from "appbit";
 import fs from "fs";
 
 var settings = {};
@@ -64,14 +65,16 @@ function settingsChanged() {
   if(empty) {
     barname.text = "Barcodes";
     display.autoOff = true;
+    me.appTimeoutEnabled = true;
   } else {
     let item = settings.cards[0];
     barname.text = item.name || "";
     frgd.style.fill = item.color || "#12D612";
     bartext.text = setBarcode(item.code, item.type);
     display.autoOff = false;
-    display.brightnessOverride = settings.bright ? 1 : undefined;
+    me.appTimeoutEnabled = false;
     setTimeout(() => {display.autoOff = true}, 180000);
+    display.brightnessOverride = settings.bright ? "max" : undefined;
   }
   barcode.style.display = empty ? "none" : "inline";
   bartext.style.display = empty ? "none" : "inline";
