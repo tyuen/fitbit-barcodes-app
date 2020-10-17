@@ -55,10 +55,20 @@ function init() {
 
   settingsChanged();
 
-  document.onkeypress = onKeyPress;
+  document.onkeydown = onKeyDown;
+  document.getElementById("up-btn").onclick = () => flipDeck(-1);
+  document.getElementById("down-btn").onclick = () => flipDeck(1);
 }
 
 init();
+
+function onKeyDown(e) {
+  if(e.key === "up") {
+    flipDeck(-1);
+  } else if(e.key === "down") {
+    flipDeck(1);
+  }
+}
 
 function settingsChanged() {
   let empty = !settings.cards || (settings.cards.length === 0);
@@ -83,13 +93,13 @@ function settingsChanged() {
 
 var clickTimer;
 
-function onKeyPress(e) {
+function flipDeck(dir) {
   if(settings.cards) {
     let max = settings.cards.length;
-    if(e.key === "up") {
+    if(dir === -1) {
       selected--;
       if(selected < 0) selected = max - 1;
-    } else if(e.key === "down") {
+    } else if(dir === 1) {
       selected++;
       if(selected >= max) selected = 0;
     } else return;
@@ -113,7 +123,6 @@ function pendingFiles() {
   while(temp = inbox.nextFile()) {
     vibration.start("nudge");
     display.poke();
-    console.log("rcvd");
     settings = fs.readFileSync(temp, "json");
     fs.unlinkSync(temp);
     if(settings.cards) {
