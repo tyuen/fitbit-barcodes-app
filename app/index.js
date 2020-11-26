@@ -25,6 +25,7 @@ import fs from "fs";
 var settings = {};
 var lastClearedBars = 0;
 var selected = 0;
+var keepOpenUntil = Date.now() + 180000;
 
 var frgd = document.getElementById("frgd");
 var barname = document.getElementById("caption");
@@ -58,6 +59,11 @@ function init() {
   document.onkeydown = onKeyDown;
   document.getElementById("up-btn").onclick = () => flipDeck(-1);
   document.getElementById("down-btn").onclick = () => flipDeck(1);
+  //document.getElementById("up-btn").onactivate = () => flipDeck(-1);
+  //document.getElementById("down-btn").onactivate = () => flipDeck(1);
+  display.onchange = () => {
+    if(!display.on && Date.now() < keepOpenUntil) display.poke();
+  };
 }
 
 init();
@@ -74,16 +80,18 @@ function settingsChanged() {
   let empty = !settings.cards || (settings.cards.length === 0);
   if(empty) {
     barname.text = "Barcodes";
-    display.autoOff = true;
+    //display.autoOff = true;
+    keepOpenUntil = 0;
     me.appTimeoutEnabled = true;
   } else {
     let item = settings.cards[0];
     barname.text = item.name || "";
     frgd.style.fill = item.color || "#12D612";
     bartext.text = setBarcode(item.code, item.type);
-    display.autoOff = false;
+    //display.autoOff = false;
+    keepOpenUntil = Date.now() + 180000;
     me.appTimeoutEnabled = false;
-    setTimeout(() => {display.autoOff = true}, 180000);
+    //setTimeout(() => {display.autoOff = true}, 180000);
     display.brightnessOverride = settings.bright ? "max" : undefined;
   }
   barcode.style.display = empty ? "none" : "inline";
